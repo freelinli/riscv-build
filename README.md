@@ -1,7 +1,15 @@
 # How to build
 - source openembedded-core/oe-init-build-env
-- cp bblayers.conf to build/conf
+- add meta to build/conf
+```
+bitbake-layers add-layer ../meta-openembedded/meta-oe
+bitbake-layers add-layer ../meta-openembedded/meta-python
+bitbake-layers add-layer ../meta-openembedded/meta-multimedia
+bitbake-layers add-layer ../meta-openembedded/meta-networking
+bitbake-layers add-layer ../meta-riscv
+```
 - cd build && MACHINE=qemuriscv64 bitbake core-image-full-cmdline/core-image-minimal
+- cd build && MACHINE=nezha-allwinner-d1 bitbake core-image-minimal
 
 # Output
 
@@ -52,4 +60,13 @@ hwrng          pts            ram3           stderr         tty14          tty23
 ```
 
 # Programming
-Todo
+```
+ls tmp-glibc/deploy/images/nezha-allwinner-d1/*.wic.gz
+zcat tmp-glibc/deploy/images/nezha-allwinner-d1/core-image-minimal-nezha-allwinner-d1.wic.gz | sudo dd of=/dev/sdb bs=4M iflag=fullblock oflag=direct conv=fsync status=progress
+```
+or
+```
+IMAGE_FSTYPES += "cpio.gz"
+setenv bootcmd 'fatload mmc 0:1 ${kernel_addr_r} zImage && fatload mmc 0:1 ${fdt_addr_r} zynq-zc702.dtb && fatload mmc 0:1 ${ramdisk_addr_r}  rootfs.cpio.gz.u-boot && bootz ${kernel_addr_r}  ${ramdisk_addr_r}  ${fdt_addr_r}'
+saveenv
+```
