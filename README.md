@@ -9,7 +9,8 @@ bitbake-layers add-layer ../meta-openembedded/meta-networking
 bitbake-layers add-layer ../meta-riscv
 ```
 - cd build && MACHINE=qemuriscv64 bitbake core-image-full-cmdline/core-image-minimal
-- cd build && MACHINE=nezha-allwinner-d1 bitbake core-image-minimal
+- cd build && UBOOT_DTB_BINARY=sun20i-d1-nezha-1g.dtb MACHINE=nezha-allwinner-d1 bitbake core-image-minimal
+- UBOOT_DTB_BINARY=sun20i-d1-nezha-1g.dtb MACHINE=nezha-allwinner-d1 bitbake u-boot-nezha -C compile
 
 # Output
 
